@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+</head>
+<body>
+    <h1>Image Search</h1>
+    <form action="/api/search" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <button type="submit">Search</button>
+    </form>
+    <div id="results"></div>
+
+   <script>
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();  // Prevent default form submission
+
+        const formData = new FormData(this);
+        
+        fetch('/api/search', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').innerHTML = 
+                `Most similar image: ${data.most_similar_image}<br> 
+                Similarity score: ${data.similarity_score}`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('result').innerHTML = 'An error occurred.';
+        });
+    });
+</script>
+</body>
+</html>
